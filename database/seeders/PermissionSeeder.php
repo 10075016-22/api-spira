@@ -21,7 +21,7 @@ class PermissionSeeder extends Seeder
                 'name'       => 'home'
             ],
             [
-                'name'       => 'users'
+                'name'       => 'user'
             ],
             [
                 'name'       => 'addUser'
@@ -37,7 +37,7 @@ class PermissionSeeder extends Seeder
             ],
             // courses
             [
-                'name'       => 'courses'
+                'name'       => 'course'
             ],
             [
                 'name'       => 'addCourse'
@@ -49,15 +49,19 @@ class PermissionSeeder extends Seeder
                 'name'       => 'deleteCourse'
             ],
             [
-                'name'       => 'viewCourse'            ],
+                'name'       => 'viewCourse'
+            ],
 
             // asignaciones
             [
-                'name'       => 'assignment'            ],
-
+                'name'       => 'assignment'
+            ],
+            [
+                'name'       => 'addAssignment'
+            ],
             // perfiles
             [
-                'name'       => 'roles'
+                'name'       => 'role'
             ],
             [
                 'name'       => 'addRole'
@@ -69,11 +73,12 @@ class PermissionSeeder extends Seeder
                 'name'       => 'deleteRole'
             ],
             [
-                'name'       => 'viewRole'            ],
+                'name'       => 'viewRole'
+            ],
 
             // permisos
             [
-                'name'       => 'permissions'
+                'name'       => 'permission'
             ],
             [
                 'name'       => 'addPermission'

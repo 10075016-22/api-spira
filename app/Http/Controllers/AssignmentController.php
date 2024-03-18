@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\assignment;
 use App\Models\headerTables;
 use App\Models\tables;
+use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\Auth;
 
 use Illuminate\Http\Request;
 
@@ -23,12 +25,23 @@ class AssignmentController extends Controller
 
         $tabla = tables::whereId($params['nIdTabla'])->first();
         $headers = headerTables::whereTableId($params['nIdTabla'])->orderBy('order')->get();
-        $assignment = assignment::with(['user', 'course'])->get();
-        return response()->json([
-            'data'  => $assignment,
-            'tabla' => $tabla,
-            'headers' => $headers
-        ]);
+
+        $user = Auth::user();
+
+        $role = Role::whereName($user->getRoleNames()[0])->first();
+
+        if(isset($role)) {
+            if($role->id === 1) {
+                $assignment = assignment::with(['user', 'course'])->get();
+            } else {
+                $assignment = assignment::with(['user', 'course'])->whereUserId($user->id)->get();
+            }
+            return response()->json([
+                'data'  => $assignment,
+                'tabla' => $tabla,
+                'headers' => $headers
+            ]);
+        }
     }
 
     /**
