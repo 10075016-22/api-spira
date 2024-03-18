@@ -1,64 +1,71 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
+<img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400">
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+# 1. API DOCUMENTACIÓN
 
-## About Laravel
+Teniendo en cuenta la problematica presentada se presenta la siguiente solución.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+La idea inicial es la creación de un sistema web tipo _REST_ que permita llevar por separado el entorno _backend_ del _frontend_, de esta forma, se implementa los servicios usando _php Laravel_ y _Vue js_ del lado del cliente. 
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+Ya inmersos en la problematica, se lleva a cabo un sistema que maneja roles y permisos, los cuales permiten llevar un poco más allá el problema, debido a que, inicialmente son dos usuarios pero si se piensa en un futuro podrían ser _N perfiles_ y con diferentes permisos. Así, continuamos con la explicación de la solución.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## 1.1 Diagrama Entidad relación
 
-## Learning Laravel
+![](./img/db.png)
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+Iniciamos con las primeras 4 tablas de este diagrama, `components`, `action_tables`, `tables` y `header_tables`
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+Esta pequeña arquitectura se implementa para poder llevar un control de los registros que se muestran en las tablas (Grid) de cada modulo, con el fin que si a futuro se desean agregar o quitar más campos se pueda realizar por base de datos, de la misma forma con las acciones de esta. Realizando dentro de los servicios una función generica que permita hacer esto.
 
-## Laravel Sponsors
+Aquí el centro corresponde a  _tables_ donde se crean los registros para las tablas del sistema.
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
 
-### Premium Partners
+Luego continuamos con las tablas principales de nuestro objetivo y son _courses_, _assignment_ y _users_ que corresponden a los cursos, usuarios y asignaciones.
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+Ya por último tenemos las tablas asociadas a laravel (por defecto) y las tablas relacionadas al paquete de [Spattie Laravel](https://spatie.be/docs/laravel-permission/v6/basic-usage/basic-usage) 
 
-## Contributing
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
 
-## Code of Conduct
+## 1.2 Endpoints
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Se asocia postman ![Postman servicios](./img/Spira.postman_collection.json)
 
-## Security Vulnerabilities
+## 1.3
+### Pasos para iniciar project
+- Realiza una copia al archivo `.env.example` y lo llamas `.env` 
+- Asegurate de tener creada tu base de datos para que la asocies dentro de la variable _DB_DATABASE_ de igual forma, asegurate de que las credenciales estén correctas.
+- Asegurate de haber descargado las dependencias del projecto, si no lo haz hecho ejecuta el siguiente comando 
+```bash
+composer install
+```
+- Crea una _key_ para el proyecto
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+```bash
+php artisan key:generate
+```
 
-## License
+- Ya teniendo todo configurado ejecutamos las migraciones del proyecto con sus respectivos seeders, estos nos permiten cargar información directo a la base de datos, para ello ejecutaremos
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+```bash
+php artisan migrate --seed
+```
+
+si ya hiciste este proceso pero por alguna razon olvidaste el seed ejecutas
+```bash
+php artisan migrate:fresh --seed
+```
+ten en cuenta que esto hace un `rollback` a toda la base de datos e iniciará de nuevo.
+
+- Por ultimo ejecuta el siguiente comando para iniciar el servidor
+```bash
+php artisan serve
+```
+
+## 1.4 Capturas
+### Login
+![](./img/Login.png)
+
+### Home Admin
+![](./img/homeAdmin.png)
+
+### Home alumno
+![](./img/homealumno.png)
