@@ -15,7 +15,14 @@ class CreateComponentsTable extends Migration
     {
         Schema::create('components', function (Blueprint $table) {
             $table->id();
+
+            $table->string('component');
+            $table->string('description')->nullable();
+
+            $table->tinyInteger('status')->default(1);
+            $table->string('message')->nullable();
             $table->timestamps();
+
         });
     }
 

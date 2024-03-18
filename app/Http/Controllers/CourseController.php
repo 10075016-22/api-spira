@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\course;
 use App\Models\headerTables;
 use App\Models\tables;
-
+use App\Models\actionTable;
 use Illuminate\Http\Request;
 
 class CourseController extends Controller
@@ -22,12 +22,20 @@ class CourseController extends Controller
 
         $tabla = tables::whereId($params['nIdTabla'])->first();
         $headers = headerTables::whereTableId($params['nIdTabla'])->orderBy('order')->get();
-        $usuarios = course::whereStatus(1)->get();
+        $courses = course::whereStatus(1)->get();
+        $actions = actionTable::with(['component'])->whereTableId($params['nIdTabla'])->orderBy('order')->get();
         return response()->json([
-            'data'  => $usuarios,
+            'data'  => $courses,
             'tabla' => $tabla,
-            'headers' => $headers
+            'headers' => $headers,
+            'actions' => $actions
         ]);
+    }
+
+    public function get() {
+        $courses = course::get();
+        return response()->json($courses);
+
     }
 
     /**
@@ -48,7 +56,12 @@ class CourseController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try {
+            $course = course::create($request->all());
+            return response()->json(['message' => 'Curso agregado de forma correcta', 'course' => $course]);
+        } catch (\Throwable $th) {
+            return response()->json(['message' => 'Ha ocurrido un error']);
+        }
     }
 
     /**

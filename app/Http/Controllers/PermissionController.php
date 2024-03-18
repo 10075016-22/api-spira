@@ -7,6 +7,8 @@ use Spatie\Permission\Models\Permission;
 use App\Models\headerTables;
 use App\Models\tables;
 
+use App\Models\actionTable;
+
 class PermissionController extends Controller
 {
     /**
@@ -22,10 +24,14 @@ class PermissionController extends Controller
         $tabla = tables::whereId($params['nIdTabla'])->first();
         $headers = headerTables::whereTableId($params['nIdTabla'])->orderBy('order')->get();
         $permission = Permission::get();
+
+        $actions = actionTable::with(['component'])->whereTableId($params['nIdTabla'])->orderBy('order')->get();
+
         return response()->json([
             'data'  => $permission,
             'tabla' => $tabla,
-            'headers' => $headers
+            'headers' => $headers,
+            'actions' => $actions
         ]);
     }
 

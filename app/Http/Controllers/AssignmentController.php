@@ -49,7 +49,18 @@ class AssignmentController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try {
+            $courses = $request->courses;
+            foreach ($courses as $key => $value) {
+                assignment::create([
+                    'user_id'   => $request->user_id,
+                    'course_id' => $value,
+                ]);
+            }
+            return response()->json(['message' => 'Cursos asociados exitosamente']);
+        } catch (\Throwable $th) {
+            return response()->json(['message' => 'Ha ocurrido un error']);
+        }
     }
 
     /**

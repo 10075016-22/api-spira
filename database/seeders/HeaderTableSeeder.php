@@ -50,6 +50,7 @@ class HeaderTableSeeder extends Seeder
                 'dataField' => 'status',
                 'caption'   => 'Estado',
                 'order'     => 5,
+                'visible'   => 0
             ],
 
             // courses
@@ -83,6 +84,12 @@ class HeaderTableSeeder extends Seeder
             ],
             [
                 'table_id'  => 3,
+                'dataField' => 'course.name',
+                'caption'   => 'Curso',
+                'order'     => 4,
+            ],
+            [
+                'table_id'  => 3,
                 'dataField' => 'user.email',
                 'caption'   => 'Email',
                 'order'     => 2,
@@ -92,12 +99,6 @@ class HeaderTableSeeder extends Seeder
                 'dataField' => 'user.phone',
                 'caption'   => 'Tel',
                 'order'     => 3,
-            ],
-            [
-                'table_id'  => 3,
-                'dataField' => 'course.name',
-                'caption'   => 'Curso',
-                'order'     => 4,
             ],
             [
                 'table_id'  => 3,

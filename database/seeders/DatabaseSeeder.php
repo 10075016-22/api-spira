@@ -18,7 +18,10 @@ class DatabaseSeeder extends Seeder
             TableSeeder::class,
             HeaderTableSeeder::class,
             ModuleSeeder::class,
-            RoleSeeder::class
+            RoleSeeder::class,
+            ComponentSeeder::class,
+            ActionTableSeeder::class,
+            PermissionSeeder::class
         ]);
     }
 }

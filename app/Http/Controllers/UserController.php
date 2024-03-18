@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Models\headerTables;
 use App\Models\tables;
+use App\Models\actionTable;
 
 class UserController extends Controller
 {
@@ -74,6 +75,8 @@ class UserController extends Controller
 
         $tabla = tables::whereId($params['nIdTabla'])->first();
         $headers = headerTables::whereTableId($params['nIdTabla'])->orderBy('order')->get();
+        $actions = actionTable::with(['component'])->whereTableId($params['nIdTabla'])->orderBy('order')->get();
+
         $usuarios = User::get();
         foreach ($usuarios as $usuario) {
             $roles = $usuario->roles; // Esto devuelve una colección de roles del usuario
@@ -84,8 +87,15 @@ class UserController extends Controller
         return response()->json([
             'data'  => $usuarios,
             'tabla' => $tabla,
-            'headers' => $headers
+            'headers' => $headers,
+            'actions' => $actions
         ]);
+
+    }
+
+    public function get() {
+        $usuarios = User::get();
+        return response()->json($usuarios);
 
     }
 
@@ -107,7 +117,19 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try {
+            $user = User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
+                'phone' => $request->phone,
+            ]);
+            $user->assignRole($request->perfil);
+
+            return response()->json(['message' => 'Usuario creado correctamente']);
+        } catch (\Throwable $th) {
+            return response()->json(['message' => 'Ha ocurrido un error', 'error' => $th->getMessage()]);
+        }
     }
 
     /**
@@ -150,9 +172,19 @@ class UserController extends Controller
      * @param  \App\Models\Usuario  $usuario
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Usuario $usuario)
+    public function destroy($id)
     {
-        //
+        try {
+            $user = Auth::user();
+            // no se puede eliminar por que está loggeado
+            if($id == $user->id) return response()->json(['message' => 'No puede eliminar su usuario'], 210);
+            $record = User::find($id);
+            $record->delete();
+
+            return response()->json(['message' => 'Registro eliminado exitosamente'], 200);
+        } catch (\Throwable $th) {
+            return response()->json(['message' => 'Ha ocurrido un error'], 500);
+        }
     }
 
     public function logout(Request $request) {

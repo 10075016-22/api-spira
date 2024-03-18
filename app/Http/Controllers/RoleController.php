@@ -8,7 +8,7 @@ use Spatie\Permission\Models\Role;
 
 use App\Models\headerTables;
 use App\Models\tables;
-
+use App\Models\actionTable;
 class RoleController extends Controller
 {
     /**
@@ -24,11 +24,20 @@ class RoleController extends Controller
         $tabla = tables::whereId($params['nIdTabla'])->first();
         $headers = headerTables::whereTableId($params['nIdTabla'])->orderBy('order')->get();
         $roles = Role::get();
+
+        $actions = actionTable::with(['component'])->whereTableId($params['nIdTabla'])->orderBy('order')->get();
+
         return response()->json([
             'data'  => $roles,
             'tabla' => $tabla,
-            'headers' => $headers
+            'headers' => $headers,
+            'actions' => $actions
         ]);
+    }
+
+    public function get() {
+        $roles = Role::get();
+        return response()->json($roles);
     }
 
     /**

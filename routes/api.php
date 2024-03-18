@@ -38,15 +38,18 @@ Route::group(['prefix' => 'v1'], function() {
         Route::resource('modules', ModuleController::class);
 
         // usuarios
+        Route::get('getUsers', [UserController::class, 'get']);
         Route::resource('users', UserController::class);
 
         // cursos
+        Route::get('getCourses', [CourseController::class, 'get']);
         Route::resource('courses', CourseController::class);
 
         // asignaciones
         Route::resource('assignments', AssignmentController::class);
 
         // roles
+        Route::get('getRoles', [RoleController::class, 'get']);
         Route::resource('roles', RoleController::class);
 
         // roles
