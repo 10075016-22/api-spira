@@ -161,9 +161,14 @@ class UserController extends Controller
      * @param  \App\Models\Usuario  $usuario
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Usuario $usuario)
+    public function update(Request $request, $id)
     {
-        //
+        try {
+            $user = User::whereId($id)->update($request);
+            return response()->json(['message' => 'Usuario actualizado correctamente', 'user' => $id]);
+        } catch (\Throwable $th) {
+            return response()->json(['message' => 'Ha ocurrido un error']);
+        }
     }
 
     /**

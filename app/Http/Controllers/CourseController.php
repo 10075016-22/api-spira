@@ -93,9 +93,13 @@ class CourseController extends Controller
      * @param  \App\Models\course  $course
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, course $course)
-    {
-        //
+    public function update(Request $request, $id) {
+        try {
+            $course = course::whereId($id)->update( $request->all() );
+            return response()->json([ "message" => "Curso actualizado correctamente ", "course"=> $course ]);
+        } catch (\Throwable $th) {
+            return response()->json(['message' => 'Ha ocurrido un error']);
+        }
     }
 
     /**
